@@ -1,0 +1,188 @@
+ <!-- 1 -->
+SELECT S.student_id FROM student S WHERE S.level = 'SR' AND S.student_id IN ( SELECT student_id FROM enrolled NATURAL JOIN semester_course WHERE prof_id = 1 );
+
+ Showing rows 0 -  1 (2 total, Query took 0.0004 seconds.)
+
+
+SELECT S.student_id FROM student S WHERE S.level = 'SR' AND S.student_id IN ( SELECT student_id FROM enrolled NATURAL JOIN semester_course WHERE prof_id = 1 );
+
+
+student_id	
+201	
+202	
+
+
+ <!-- 2 -->
+127.0.0.1/course resgistration processing system/student/http://localhost:8080/phpmyadmin/index.php?route=/table/sql&db=course+resgistration+processing+system&table=student
+
+   Showing rows 0 -  0 (1 total, Query took 0.0009 seconds.)
+
+
+SELECT MAX(S.age) FROM student S WHERE S.student_id IN (( SELECT student_id FROM student WHERE major = 'History' ) UNION 
+( SELECT DISTINCT student_id FROM enrolled E NATURAL JOIN semester_course SC NATURAL JOIN Professor P WHERE P.prof_name = 'Michael Miller'));
+
+22
+
+
+ <!-- 3 -->
+SELECT Sub.student_name, C.name FROM course C RIGHT OUTER JOIN ( SELECT S.student_name, E.course_code FROM student S LEFT OUTER JOIN enrolled E ON S.student_id = E.student_id ) AS Sub ON Sub.course_code = C.course_code;
+127.0.0.1/course resgistration processing system/student/		http://localhost:8080/phpmyadmin/index.php?route=/table/sql&db=course+resgistration+processing+system&table=student
+
+   Showing rows 0 - 24 (58 total, Query took 0.0003 seconds.)
+
+
+SELECT Sub.student_name, C.name FROM course C RIGHT OUTER JOIN ( SELECT S.student_name, E.course_code FROM student S LEFT OUTER JOIN enrolled E ON S.student_id = E.student_id ) AS Sub ON Sub.course_code = C.course_code;
+
+
+student_name	name	
+Maria White	Data Structures	
+Maria White	Data Structures	
+Maria White	Archaeology of the Incas	
+Maria White	Aviation Accident Investigation	
+Charles Harris	Data Structures	
+Charles Harris	Database Systems	
+Charles Harris	Operating System Design	
+Charles Harris	Air Quality Engineering	
+Susan Martin	Database Systems	
+Susan Martin	Operating System Design	
+Susan Martin	Archaeology of the Incas	
+Joseph Thompson	Data Structures	
+Joseph Thompson	American Political Parties	
+Joseph Thompson	Social Cognition	
+Christopher Garcia	Operating System Design	
+Angela Martinez	Data Structures	
+Thomas Robinson	Database Systems	
+Thomas Robinson	Introductory Latin	
+Margaret Clark	Data Structures	
+Margaret Clark	Operating System Design	
+Margaret Clark	Archaeology of the Incas	
+Margaret Clark	Aviation Accident Investigation	
+Margaret Clark	Air Quality Engineering	
+Juan Rodriguez	Data Structures	
+Juan Rodriguez	Archaeology of the Incas
+
+
+ <!-- 4 -->
+SELECT P.prof_name FROM semester_course SC NATURAL JOIN Professor P GROUP BY (SC.prof_id HAVING ( COUNT(*) < 5))
+127.0.0.1/course resgistration processing system/P/		http://localhost:8080/phpmyadmin/index.php?route=/table/sql&db=course+resgistration+processing+system&table=student
+
+   Showing rows 0 -  3 (4 total, Query took 0.0003 seconds.)
+
+
+SELECT P.prof_name FROM semester_course SC NATURAL JOIN Professor P GROUP BY SC.prof_id HAVING ( COUNT(*) < 5);
+
+
+prof_name	
+James Smith	
+Mary Johnson	
+John Williams	
+Patricia Jones	
+
+
+<!-- 5 -->
+SELECT S.student_name FROM Professor P NATURAL JOIN semester_course SC NATURAL JOIN enrolled E NATURAL JOIN student S WHERE P.prof_id = 2 
+ GROUP BY S.student_name HAVING COUNT(*) = (SELECT COUNT(*) FROM Professor P NATURAL JOIN semester_course SC WHERE P.prof_id = 2 )
+
+
+
+<!-- 6 -->
+(SELECT C.course_code, C.name FROM Professor P NATURAL JOIN Department D NATURAL JOIN semester_course SC NATURAL JOIN course C WHERE D.dept_name = 'Computer Science' ) UNION 
+( SELECT * FROM course C1 WHERE C1.course_code IN (( SELECT C2.course_code FROM course C2 ) EXCEPT ( SELECT SC1.course_code FROM semester_course SC1 )))
+127.0.0.1/course resgistration processing system/C/		http://localhost:8080/phpmyadmin/index.php?route=/table/sql&db=course+resgistration+processing+system&table=S
+
+   Showing rows 0 -  6 (7 total, Query took 0.0007 seconds.)
+
+
+(SELECT C.course_code, C.name FROM Professor P NATURAL JOIN Department D NATURAL JOIN semester_course SC NATURAL JOIN course C WHERE D.dept_name = 'Computer Science' ) UNION 
+( SELECT * FROM course C1 WHERE C1.course_code IN (( SELECT C2.course_code FROM course C2 ) EXCEPT ( SELECT SC1.course_code FROM semester_course SC1 )));
+
+
+course_code	name	
+CC19	Perception	
+CC10	Data Structures	
+CC20	Multivariate Analysis	
+CC12	Operating System Design	
+CC21	Patent Law	
+CC22	Urban Economics	
+CC23	Organic Chemistry	
+
+
+<!-- 7 -->
+( SELECT P.prof_name AS NAME FROM semester_course SC NATURAL JOIN Professor P WHERE P.prof_name LIKE 'M%' GROUP BY SC.prof_id HAVING COUNT(*) > 2 ) UNION 
+( SELECT S.student_name AS NAME FROM student S WHERE S.student_name LIKE 'M%' AND S.age < 20 )
+	
+127.0.0.1/course resgistration processing system/P/		http://localhost:8080/phpmyadmin/index.php?route=/table/sql&db=course+resgistration+processing+system&table=C
+
+   Showing rows 0 -  2 (3 total, Query took 0.0003 seconds.)
+
+
+( SELECT P.prof_name AS NAME FROM semester_course SC NATURAL JOIN Professor P WHERE P.prof_name LIKE 'M%' GROUP BY SC.prof_id
+	HAVING COUNT(*) > 2 ) UNION ( SELECT S.student_name AS NAME FROM student S WHERE S.student_name LIKE 'M%' AND S.age < 20 );
+
+
+NAME	
+Michael Miller	
+Margaret Clark	
+Mark Young	
+
+
+
+<!-- 8 -->
+SELECT P.prof_id, P.prof_name FROM semester_course SC NATURAL JOIN Professor P WHERE P.dept_id IN (1,2,3,4) GROUP BY SC.prof_id HAVING COUNT(*) < 2 
+127.0.0.1/course resgistration processing system/P/		http://localhost:8080/phpmyadmin/index.php?route=/table/sql&db=course+resgistration+processing+system&table=P
+
+   Showing rows 0 -  1 (2 total, Query took 0.0003 seconds.)
+
+
+SELECT P.prof_id, P.prof_name FROM semester_course SC NATURAL JOIN Professor P WHERE P.dept_id IN (1,2,3,4) GROUP BY SC.prof_id
+	HAVING COUNT(*) < 2;
+
+
+prof_id	prof_name	
+3	Mary Johnson	
+5	Patricia Jones	
+
+<!-- 10 -->
+SELECT P.prof_id, C.course_code, P.prof_name, C.name Course_Name FROM semester_course SC NATURAL JOIN course C NATURAL JOIN Professor P GROUP BY SC.prof_id, SC.course_code HAVING COUNT(*) > 1;
+
+
+127.0.0.1/course resgistration processing system/Professor/		http://localhost:8080/phpmyadmin/index.php?route=/table/sql&db=course+resgistration+processing+system&table=Professor
+
+   Showing rows 0 -  2 (3 total, Query took 0.0003 seconds.)
+
+
+SELECT P.prof_id, C.course_code, P.prof_name, C.name Course_Name FROM semester_course SC NATURAL JOIN course C NATURAL JOIN Professor P GROUP BY SC.prof_id, SC.course_code HAVING COUNT(*) > 1;
+
+
+prof_id	course_code	prof_name	Course_Name	
+1	CC10	Ivana Teach	Data Structures	
+1	CC15	Ivana Teach	Air Quality Engineering	
+6	CC12	Michael Miller	Operating System Design	
+
+
+
+<!-- 11 -->
+SELECT Sub2.dept_id, SUM(Sub2.course_count) AS total_courses FROM ( SELECT D.dept_id, COALESCE(Sub1.course_count, 0) AS course_count FROM Department D LEFT OUTER JOIN ( SELECT P.dept_id, COUNT(*) course_count FROM
+ Professor P NATURAL JOIN semester_course SC GROUP BY P.prof_id ) AS Sub1 ON D.dept_id = Sub1.dept_id ) AS Sub2 
+		GROUP BY Sub2.dept_id
+		HAVING total_courses < 3
+127.0.0.1/course resgistration processing system/Sub2/		http://localhost:8080/phpmyadmin/index.php?route=/table/sql&db=course+resgistration+processing+system&table=Professor
+
+   Showing rows 0 -  2 (3 total, Query took 0.0003 seconds.)
+
+
+SELECT Sub2.dept_id, SUM(Sub2.course_count) AS total_courses FROM ( SELECT D.dept_id, COALESCE(Sub1.course_count, 0) AS course_count FROM Department D LEFT OUTER JOIN ( SELECT P.dept_id, COUNT(*) course_count FROM Professor P NATURAL JOIN
+ semester_course SC GROUP BY P.prof_id ) AS Sub1 ON D.dept_id = Sub1.dept_id ) AS Sub2 GROUP BY Sub2.dept_id HAVING total_courses < 3;
+
+
+dept_id	total_courses	
+4	0	
+5	0	
+6	0	
+
+
+
+
+
+	
+

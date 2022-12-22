@@ -1,0 +1,13 @@
+  CREATE DATABASE `Course Resgistration Processing System`
+CREATE TABLE Department
+ ( dept_id INT NOT NULL, dept_name VARCHAR(50) NOT NULL, PRIMARY KEY (dept_id));
+CREATE TABLE student
+ ( student_id INT NOT NULL, student_name VARCHAR(50) NOT NULL, major VARCHAR(30), `level` VARCHAR(5), age INT, PRIMARY KEY (student_id));
+CREATE TABLE Professor
+ ( prof_id INT NOT NULL, prof_name VARCHAR(50) NOT NULL, dept_id INT NOT NULL, PRIMARY KEY (prof_id), FOREIGN KEY(dept_id) REFERENCES Department (dept_id));
+CREATE TABLE course
+ ( course_code VARCHAR(20) NOT NULL, name VARCHAR(50) NOT NULL, PRIMARY KEY (course_code));
+CREATE TABLE semester_course
+ ( course_code VARCHAR(20) NOT NULL, quarter VARCHAR(20) NOT NULL, `year` INT NOT NULL, prof_id INT NOT NULL, PRIMARY KEY (course_code, quarter, `year`), FOREIGN KEY(prof_id) REFERENCES Professor (prof_id), FOREIGN KEY(course_code) REFERENCES course(course_code));
+CREATE TABLE enrolled
+ ( student_id INT NOT NULL, course_code VARCHAR(20) NOT NULL, quarter VARCHAR(10) NOT NULL, `year` INT NOT NULL, enrolled_at DATE, PRIMARY KEY (student_id, course_code, quarter, `year`), FOREIGN KEY(student_id) REFERENCES student (student_id), FOREIGN KEY(course_code) REFERENCES course(course_code));
